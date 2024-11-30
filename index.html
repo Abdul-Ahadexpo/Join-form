@@ -14,8 +14,7 @@
     <h2 class="text-2xl font-semibold text-center text-gray-800 mb-4">Join Form</h2>
     <form id="contactForm" class="space-y-4">
       <input type="text" name="name" placeholder="Name" required class="input input-bordered w-full">
-      <input type="tel" name="number" placeholder="Contact Number" required class="input input-bordered w-full">
-      <input type="password" name="password" placeholder="Password" required class="input input-bordered w-full">
+      <input type="tel" name="number" placeholder="Give a Password (only use numbers)" required class="input input-bordered w-full">
       <input type="email" name="email" placeholder="Email" required class="input input-bordered w-full">
       <input type="text" name="address" placeholder="Address" required class="input input-bordered w-full">
       <button type="submit" class="btn btn-primary w-full">Submit</button>
@@ -32,14 +31,17 @@
     document.getElementById('contactForm').addEventListener('submit', e => {
       e.preventDefault();
       const formData = new FormData(e.target);
+      const data = Object.fromEntries(formData.entries());
 
       fetch(scriptURL, {
         method: 'POST',
-        body: new URLSearchParams(formData), // Fixed to send form-encoded data
+        body: JSON.stringify(data),
+        headers: { 'Content-Type': 'application/json' },
+        mode: 'no-cors'
       })
         .then(() => {
-          showNotification(`Your Data has been submitted successfully! 
-          Please wait for our "Email"`);
+          showNotification(Your Data has been submitted successfully! 
+          Please wait for our "Email");
         })
         .catch(error => {
           console.error('Error:', error);
@@ -52,7 +54,7 @@
       notification.textContent = message;
       notification.classList.remove("hidden");
 
-      // Automatically hide the notification after 5 seconds
+      // Automatically hide the notification after 3 seconds
       setTimeout(() => {
         notification.classList.add("hidden");
       }, 5000);
